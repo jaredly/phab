@@ -1,0 +1,33 @@
+{
+  "name": "phab",
+  "version": "0.0.0",
+  "description": "My Project",
+  "esy": {
+    "build": "dune build -p #{self.name}",
+    "release": {
+      "releasedBinaries": [
+        "phab.exe"
+      ]
+    }
+  },
+  "scripts": {
+    "run": "esy x phab.exe",
+    "test": "esy x TestPhab.exe"
+  },
+  "dependencies": {
+    "@opam/dune": ">=1.6.0",
+    "@opam/cohttp-lwt-unix": "*",
+    "@opam/cohttp": "*",
+    "@opam/lwt": "*",
+    "RexJson": "jaredly/rex-json#esy",
+    "belt": "jaredly/belt",
+    "let-anything-esy": "1.0.0",
+    "@esy-ocaml/reason": "*",
+    "refmterr": "*",
+    "ocaml": "^4.4.0",
+    "pesy": "*"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*"
+  }
+}

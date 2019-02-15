@@ -1,0 +1,8 @@
+
+(library
+   (name Phab)
+   (public_name phab.lib)
+   (flags :standard -open RexJson -w -58)
+   (libraries  cohttp cohttp-lwt-unix RexJson lwt lwt.unix let-anything-esy.lets)
+   (preprocess (pps belt.ppx let-anything-esy.ppx))
+)
