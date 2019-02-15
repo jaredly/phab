@@ -1,19 +1,20 @@
 
 let readFd = (descr) => {
-  let buffer_size = 8192;
-  let buffer = Bytes.create(buffer_size);
-  let rec copy_loop = (offset) => {
-    print_endline("Here " ++ string_of_int(offset));
-    let%Async count = Lwt_unix.read(descr, buffer, 0, buffer_size);
+  let buffer_size = 100;
+  let bytes = Bytes.create(buffer_size);
+  let buffer = Buffer.create(buffer_size);
+  let rec copy_loop = () => {
+    let%Async count = Lwt_unix.read(descr, bytes, 0, buffer_size);
     switch (count) {
     | 0 => Lwt.return()
     | r =>
-      let%Async () = copy_loop(offset + r);
+      Buffer.add_subbytes(buffer, bytes, 0, r);
+      let%Async () = copy_loop();
       Lwt.return()
     };
   };
-  let%Async () = copy_loop(0);
-  Async.resolve(Bytes.to_string(buffer))
+  let%Async () = copy_loop();
+  Async.resolve(Buffer.contents(buffer))
 };
 
 let readFile = (path) => {
@@ -45,11 +46,8 @@ let runCommand = (command, args) => {
   let (stderr, stderr_i) = Lwt_unix.pipe_in();
   let (stdout, stdout_i) = Lwt_unix.pipe_in();
   let process = Lwt_process.exec(~stdout=`FD_move(stdout_i), ~stderr=`FD_move(stderr_i), (command, args));
-  let%Async result = process;
-  print_endline("A");
   let%Async out = readFd(stdout);
-  print_endline("B");
   let%Async err = readFd(stderr);
-  print_endline("C");
+  let%Async result = process;
   Async.resolve((out, err, result))
 };
