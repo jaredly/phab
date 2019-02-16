@@ -12,7 +12,7 @@
   },
   "scripts": {
     "run": "esy x phab.exe",
-    "cp-bin": "cp \"#{self.target_dir}/default/executable/Main.exe\" phab.exe",
+    "cp-bin": "cp \"#{self.target_dir}/default/bin/Main.exe\" phab.exe",
     "test": "esy x TestPhab.exe"
   },
   "dependencies": {
