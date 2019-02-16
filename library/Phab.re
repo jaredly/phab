@@ -3,24 +3,24 @@ open Cohttp;
 open Cohttp_lwt_unix;
 
 let reparent = () => {
-  let%Async upStream = Fetch.getUpstream("HEAD");
+  let%Async upStream = Api.getUpstream("HEAD");
   if (upStream == "master") {
     print_endline("Upstream is master. Aborting.");
     exit(1)
   } else {
-    let%Async phab = Fetch.getPhab("HEAD");
-    let%Async upPhab = Fetch.getPhab(upStream);
+    let%Async phab = Api.getPhab("HEAD");
+    let%Async upPhab = Api.getPhab(upStream);
     switch (phab, upPhab) {
       | (Some(phab), Some(upPhab)) when phab == upPhab =>
         print_endline("This branch doesn't have a revision yet. Aborting");
         exit(1)
       | (Some(phab), Some(upPhab)) =>
         Printf.printf("Mine: D%d - Theirs: D%d\n", phab, upPhab)
-        let%Async phids = Fetch.getPhids([phab, upPhab]);
+        let%Async phids = Api.getPhids([phab, upPhab]);
         switch (phids->Belt.Map.Int.get(phab), phids->Belt.Map.Int.get(upPhab)) {
           | (Some(phab), Some(upPhab)) =>
             print_endline("Adding parent relationship");
-            Fetch.setParent(phab, upPhab);
+            Api.setParent(phab, upPhab);
           | _ => failwith("Not found revisions")
         }
         // Async.resolve();
@@ -32,14 +32,14 @@ let reparent = () => {
 
 let parentAll = () => {
   let rec loop = (child, branch) => {
-    let%Async phab = Fetch.getPhab(branch);
+    let%Async phab = Api.getPhab(branch);
     let%Async () = switch (child, phab) {
       | (Some(child), Some(parent)) =>
-        let%Async phids = Fetch.getPhids([child, parent]);
+        let%Async phids = Api.getPhids([child, parent]);
         switch (phids->Belt.Map.Int.get(child), phids->Belt.Map.Int.get(parent)) {
           | (Some(child), Some(parent)) =>
           print_endline("Parenting " ++ branch);
-          Fetch.setParent(child, parent)
+          Api.setParent(child, parent)
           | _ =>
             print_endline("Unable to resolve IDs")
             Async.resolve()
@@ -53,7 +53,7 @@ let parentAll = () => {
       | Some(id) => string_of_int(id)
     };
     print_endline(text ++ ": " ++ branch)
-    let%Async up = Fetch.getUpstream(branch);
+    let%Async up = Api.getUpstream(branch);
     if (up == "master") {
       Async.resolve()
     } else if (up == branch) {
@@ -67,13 +67,13 @@ let parentAll = () => {
 
 let showBranches = () => {
   let rec loop = (branch) => {
-    let%Async phab = Fetch.getPhab(branch);
+    let%Async phab = Api.getPhab(branch);
     let text = switch (phab) {
       | None => "!!"
       | Some(id) => string_of_int(id)
     };
     print_endline(text ++ ": " ++ branch)
-    let%Async up = Fetch.getUpstream(branch);
+    let%Async up = Api.getUpstream(branch);
       // print_endline("Up: " ++ up);
     if (up == "master") {
       Async.resolve()
