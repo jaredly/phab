@@ -2,8 +2,8 @@ open Lwt;
 open Cohttp;
 open Cohttp_lwt_unix;
 
-let run = () => {
-  let%Async upStream = Fetch.getUpstream();
+let reparent = () => {
+  let%Async upStream = Fetch.getUpstream("HEAD");
   if (upStream == "master") {
     print_endline("Upstream is master. Aborting.");
     exit(1)
@@ -30,4 +30,64 @@ let run = () => {
   }
 }
 
-let run = () => Lwt_main.run(run());
+let parentAll = () => {
+  let rec loop = (child, branch) => {
+    let%Async phab = Fetch.getPhab(branch);
+    let%Async () = switch (child, phab) {
+      | (Some(child), Some(parent)) =>
+        let%Async phids = Fetch.getPhids([child, parent]);
+        switch (phids->Belt.Map.Int.get(child), phids->Belt.Map.Int.get(parent)) {
+          | (Some(child), Some(parent)) =>
+          print_endline("Parenting " ++ branch);
+          Fetch.setParent(child, parent)
+          | _ =>
+            print_endline("Unable to resolve IDs")
+            Async.resolve()
+        }
+      | _ =>
+        print_endline("Not parenting " ++ branch);
+        Async.resolve()
+    };
+    let text = switch (phab) {
+      | None => "!!"
+      | Some(id) => string_of_int(id)
+    };
+    print_endline(text ++ ": " ++ branch)
+    let%Async up = Fetch.getUpstream(branch);
+    if (up == "master") {
+      Async.resolve()
+    } else if (up == branch) {
+      Async.resolve()
+    } else {
+      loop(phab, up)
+    }
+  };
+  loop(None, "HEAD")
+};
+
+let showBranches = () => {
+  let rec loop = (branch) => {
+    let%Async phab = Fetch.getPhab(branch);
+    let text = switch (phab) {
+      | None => "!!"
+      | Some(id) => string_of_int(id)
+    };
+    print_endline(text ++ ": " ++ branch)
+    let%Async up = Fetch.getUpstream(branch);
+      // print_endline("Up: " ++ up);
+    if (up == "master") {
+      Async.resolve()
+    } else if (up == branch) {
+      Async.resolve()
+    } else {
+      loop(up)
+    }
+  };
+  loop("HEAD")
+};
+
+let checkStatus = () => {
+  Async.resolve()
+};
+
+// let run = () => Lwt_main.run(run());

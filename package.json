@@ -29,9 +29,6 @@
     "ocaml": "^4.4.0",
     "pesy": "*"
   },
-  "resolutions": {
-    "RexJson": "link:../../libs/rex-json/esy.json"
-  },
   "devDependencies": {
     "@opam/merlin": "*"
   }

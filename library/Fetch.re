@@ -22,6 +22,8 @@ let readFile = (path) => {
   readFd(descr)
 }
 
+module Json = RexJson.Json;
+
 let getAuth = () => {
   let home = Sys.getenv("HOME");
   let fpath = Filename.concat(home, ".arcrc");
@@ -53,14 +55,14 @@ let runCommand = (args) => {
   Async.resolve((out, err, result))
 };
 
-let getUpstream = () => {
-  let%Async (out, _, _) = runCommand([|"git", "rev-parse", "--abbrev-ref", "HEAD@{upstream}"|]);
+let getUpstream = (branch) => {
+  let%Async (out, _, _) = runCommand([|"git", "rev-parse", "--abbrev-ref", branch ++ "@{upstream}"|]);
   Async.resolve(Base__String.strip(out))
 };
 let phabRx = Str.regexp(" *Differential Revision:.*/D\\([0-9]+\\) *");
 let getPhab = (branch) => {
   let%Async (out, _, result) = runCommand([|"git", "log", branch ++ "@{upstream}.." ++ branch|]);
-  print_endline(branch)
+  // print_endline(branch)
   switch result {
     | WEXITED(0) =>
       let lines = String.split_on_char('\n', out);
@@ -135,7 +137,7 @@ let getPhids = (ids) => {
 
 let setParent = (child, parent) => {
   let%Async data = call("differential.revision.edit", [
-    ("transactions[0][type]", "parents.add"),
+    ("transactions[0][type]", "parents.set"),
     ("transactions[0][value][0]", parent),
     ("objectIdentifier", child)
   ]);

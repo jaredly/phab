@@ -1,5 +1,5 @@
 {
-  "checksum": "080069bf29185cd9c30db60c35a24136",
+  "checksum": "a1d91bd94a722ec9cd1b4e09be9639ed",
   "root": "phab@link-dev:./package.json",
   "node": {
     "refmterr@3.1.10@d41d8cd9": {
@@ -33,7 +33,7 @@
         "refmterr@3.1.10@d41d8cd9", "pesy@0.4.1@d41d8cd9",
         "ocaml@4.7.1004@d41d8cd9", "let-anything-esy@1.0.0@d41d8cd9",
         "belt@github:jaredly/belt#200d736fa08438c91d8c6dd553b97ecbd9c7ab33@d41d8cd9",
-        "RexJson@link:../../libs/rex-json/esy.json",
+        "RexJson@github:jaredly/rex-json#24f160dcb50cafd81dce020711adc63f3b894b41@d41d8cd9",
         "@opam/tls@opam:0.9.3@3b4eb001", "@opam/lwt@opam:4.1.0@111fc2bf",
         "@opam/dune@opam:1.7.1@6f40bfee",
         "@opam/cohttp-lwt-unix@opam:2.0.0@2055e2ef",
@@ -110,14 +110,17 @@
       ],
       "devDependencies": []
     },
-    "RexJson@link:../../libs/rex-json/esy.json": {
-      "id": "RexJson@link:../../libs/rex-json/esy.json",
+    "RexJson@github:jaredly/rex-json#24f160dcb50cafd81dce020711adc63f3b894b41@d41d8cd9": {
+      "id":
+        "RexJson@github:jaredly/rex-json#24f160dcb50cafd81dce020711adc63f3b894b41@d41d8cd9",
       "name": "RexJson",
-      "version": "link:../../libs/rex-json/esy.json",
+      "version":
+        "github:jaredly/rex-json#24f160dcb50cafd81dce020711adc63f3b894b41",
       "source": {
-        "type": "link",
-        "path": "../../libs/rex-json",
-        "manifest": "esy.json"
+        "type": "install",
+        "source": [
+          "github:jaredly/rex-json#24f160dcb50cafd81dce020711adc63f3b894b41"
+        ]
       },
       "overrides": [],
       "dependencies": [
@@ -158,20 +161,20 @@
         "@opam/conf-gmp@opam:1@2abd3275"
       ]
     },
-    "@opam/yojson@opam:1.6.0@f7ec7c12": {
-      "id": "@opam/yojson@opam:1.6.0@f7ec7c12",
+    "@opam/yojson@opam:1.7.0@2d92307e": {
+      "id": "@opam/yojson@opam:1.7.0@2d92307e",
       "name": "@opam/yojson",
-      "version": "opam:1.6.0",
+      "version": "opam:1.7.0",
       "source": {
         "type": "install",
         "source": [
-          "archive:https://opam.ocaml.org/cache/md5/8c/8ca16557d3068253cc375452af3bde96#md5:8ca16557d3068253cc375452af3bde96",
-          "archive:https://github.com/ocaml-community/yojson/releases/download/1.6.0/yojson-1.6.0.tbz#md5:8ca16557d3068253cc375452af3bde96"
+          "archive:https://opam.ocaml.org/cache/md5/b8/b89d39ca3f8c532abe5f547ad3b8f84d#md5:b89d39ca3f8c532abe5f547ad3b8f84d",
+          "archive:https://github.com/ocaml-community/yojson/releases/download/1.7.0/yojson-1.7.0.tbz#md5:b89d39ca3f8c532abe5f547ad3b8f84d"
         ],
         "opam": {
           "name": "yojson",
-          "version": "1.6.0",
-          "path": "esy.lock/opam/yojson.1.6.0"
+          "version": "1.7.0",
+          "path": "esy.lock/opam/yojson.1.7.0"
         }
       },
       "overrides": [],
@@ -1177,12 +1180,12 @@
       },
       "overrides": [],
       "dependencies": [
-        "ocaml@4.7.1004@d41d8cd9", "@opam/yojson@opam:1.6.0@f7ec7c12",
+        "ocaml@4.7.1004@d41d8cd9", "@opam/yojson@opam:1.7.0@2d92307e",
         "@opam/ocamlfind@opam:1.8.0@96572762",
         "@opam/dune@opam:1.7.1@6f40bfee", "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [
-        "ocaml@4.7.1004@d41d8cd9", "@opam/yojson@opam:1.6.0@f7ec7c12",
+        "ocaml@4.7.1004@d41d8cd9", "@opam/yojson@opam:1.7.0@2d92307e",
         "@opam/ocamlfind@opam:1.8.0@96572762"
       ]
     },
